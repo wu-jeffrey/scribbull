@@ -1,9 +1,18 @@
 import * as Express from "express";
 import * as Mongoose from "mongoose";
-import * as Peer from "simple-peer";
+import { Database, httpErrorHandler } from "./app";
 
+const PORT = process.env.PORT || 5000;
 const app = Express();
 
-const server = app.listen(5000, () => {
-  console.log("server is running on port", server.address().port);
+// Middleware
+// app.use(app.json());
+
+// API routes
+
+// Error Handling Middleware
+app.use(httpErrorHandler);
+
+Database.connect().then(() => {
+  app.listen(PORT, () => console.log(`Server started at port ${PORT}`));
 });
