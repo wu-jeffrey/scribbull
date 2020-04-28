@@ -3,8 +3,6 @@ import { config } from "node-config-ts";
 
 const db_uri = process.env.mongoURI || config.mongoURI;
 
-console.log(db_uri);
-
 const mongoose = new Mongoose();
 export class Database {
   static connect() {
