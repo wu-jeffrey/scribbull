@@ -1,5 +1,5 @@
 import React from "react";
-import { Frame } from "./foundation";
+import { Frame } from "../foundation";
 import "./App.css";
 
 function App() {

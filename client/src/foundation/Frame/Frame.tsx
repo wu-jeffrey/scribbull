@@ -1,30 +1,26 @@
 import React from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
-import {
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-} from "@ant-design/icons";
-
-const { Header, Content, Footer } = Layout;
+import { Layout, Menu, Card, Button, Input } from "antd";
+import { styles } from "./frame.style";
 
 export function Frame() {
   return (
-    <Layout className="layout">
-      <Header>
+    <Layout>
+      <Layout.Header style={styles.Header}>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
-          <Menu.Item key="1">nav 1</Menu.Item>
-          <Menu.Item key="2">nav 2</Menu.Item>
-          <Menu.Item key="3">nav 3</Menu.Item>
+        <Menu theme="light" mode="horizontal">
+          <Button type="primary" shape="round" style={styles.ShareButton}>
+            Share
+          </Button>
         </Menu>
-      </Header>
-      <Content style={{ padding: "0 50px" }}>
-        <div className="site-layout-content">Content</div>
-      </Content>
-      <Footer style={{ textAlign: "center" }}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
+      </Layout.Header>
+      <Layout.Content style={styles.Content}>
+        <Card style={styles.Card}>
+          <Input></Input>
+        </Card>
+      </Layout.Content>
+      <Layout.Footer style={{ textAlign: "center" }}>
+        Scribble ©2020 Created by Jeff Wu
+      </Layout.Footer>
     </Layout>
   );
 }
