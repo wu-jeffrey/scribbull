@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const SessionSchema = new Schema({
   simplePeerId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
+    required: true,
   },
 });
 
-export const Session = mongoose.model("food", SessionSchema);
+export const Session = mongoose.model("session", SessionSchema);
