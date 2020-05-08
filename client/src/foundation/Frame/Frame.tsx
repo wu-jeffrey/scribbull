@@ -1,17 +1,22 @@
 import React from "react";
 import { Layout, Menu, Card, Button, Input } from "antd";
 import { styles } from "./frame.style";
+import { useSession } from "../CallSession";
 
 export function Frame() {
+  const { url } = useSession();
   return (
     <Layout>
       <Layout.Header style={styles.Header}>
-        <div className="logo" />
-        <Menu theme="light" mode="horizontal">
-          <Button type="primary" shape="round" style={styles.ShareButton}>
-            Share
-          </Button>
-        </Menu>
+        <Menu theme="light" mode="horizontal"></Menu>
+        <Button
+          type="primary"
+          shape="round"
+          style={styles.ShareButton}
+          href={url}
+        >
+          Share
+        </Button>
       </Layout.Header>
       <Layout.Content style={styles.Content}>
         <Card style={styles.Card}>

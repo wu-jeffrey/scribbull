@@ -1,2 +1,2 @@
 export { Database } from "./Database";
-export { Session } from "./models";
+export { Session, Peer } from "./models";

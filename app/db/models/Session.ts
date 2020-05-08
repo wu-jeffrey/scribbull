@@ -1,11 +1,12 @@
-import mongoose from "mongoose";
+import * as mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const SessionSchema = new Schema({
-  simplePeerId: {
-    type: String,
-    required: true,
-  },
+export interface ISession {
+  peers: [];
+}
+
+const SessionSchema = new Schema<ISession>({
+  peers: [{ type: Schema.Types.ObjectId, ref: "Peer" }],
 });
 
-export const Session = mongoose.model("session", SessionSchema);
+export const Session = mongoose.model("Session", SessionSchema);

@@ -1,27 +1,18 @@
-import { Mongoose } from "mongoose";
+import * as mongoose from "mongoose";
 import { config } from "node-config-ts";
 
 const db_uri = process.env.mongoURI || config.mongoURI;
 
-const mongoose = new Mongoose();
 export class Database {
   static connect() {
-    return new Promise((resolve, reject) => {
-      mongoose
-        .connect(
-          db_uri,
-          { useNewUrlParser: true, useCreateIndex: true },
-          (err) => {
-            if (err) return reject(err);
-            console.log("MongoDB connected");
-            resolve();
-          }
-        )
-        .catch((err) => console.log("Problem connecting to MongoDB: ", err));
+    mongoose.connect(db_uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-  }
-
-  static close() {
-    return mongoose.disconnect();
+    const db = mongoose.connection;
+    db.on("error", console.error.bind(console, "connection error:"));
+    db.once("open", function() {
+      console.log("Connected to MongoDB");
+    });
   }
 }

@@ -1,11 +1,13 @@
 import React from "react";
-import { Frame } from "../foundation";
+import { Frame, CallSessionProvider } from "../foundation";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <Frame></Frame>
+      <CallSessionProvider>
+        <Frame></Frame>
+      </CallSessionProvider>
     </div>
   );
 }
