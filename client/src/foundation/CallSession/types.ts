@@ -1,7 +1,7 @@
 export interface IContext {
-  host: IPeer;
-  peer: IPeer;
   url: string;
+  data: Object;
+  send?: Function | null;
 }
 
 export interface IProps {

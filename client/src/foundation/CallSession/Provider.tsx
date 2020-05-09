@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import Peer from "simple-peer";
 import { default as axios } from "axios";
 
@@ -6,21 +6,22 @@ import Context from "./Context";
 import { IProps } from "./types";
 
 export function Provider({ children }: IProps) {
-  let host = { sdp: "" };
-  let peer = { sdp: "" };
+  const [peer, setPeer] = useState<any>();
   const [url, setUrl] = useState("");
+  const [connected, setConnected] = useState(false);
+  const [data, setData] = useState({});
 
   const initiator = Boolean(window.location.hash === "#init");
   const urlParams = new URLSearchParams(window.location.search);
   const sessionId = urlParams.get("session_id");
-
-  function send() {}
 
   useMemo(() => {
     const p = new Peer({
       initiator,
       trickle: false,
     });
+
+    setPeer(p);
 
     if (sessionId) {
       (async () => {
@@ -64,11 +65,28 @@ export function Provider({ children }: IProps) {
     });
 
     p.on("connect", (data: any) => {
-      console.log("connected", data);
+      setConnected(true);
+    });
+
+    p.on("data", (data: any) => {
+      setData(data);
+      console.log(JSON.parse(data.toString()));
     });
   }, []);
 
+  const send = useCallback(
+    (data: any) => {
+      if (connected) {
+        peer.send(data);
+      }
+    },
+    [peer, connected]
+  );
+
   return (
-    <Context.Provider value={{ host, peer, url }}>{children}</Context.Provider>
+    <Context.Provider value={{ url, data, send }}>
+      {connected ? "connected" : "disconnected"}
+      {children}
+    </Context.Provider>
   );
 }
