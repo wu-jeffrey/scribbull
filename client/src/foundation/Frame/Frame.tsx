@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { Layout, Menu, Card, Button, Input } from "antd";
 import { styles } from "./frame.style";
 import { useSession } from "../CallSession";
+import { Editor } from "../../sections";
 
 export function Frame() {
   const { url, data, send } = useSession();
@@ -29,7 +30,7 @@ export function Frame() {
       </Layout.Header>
       <Layout.Content style={styles.Content}>
         <Card style={styles.Card}>
-          <Input onChange={onChange}></Input>
+          <Editor />
         </Card>
       </Layout.Content>
       <Layout.Footer style={{ textAlign: "center" }}>
