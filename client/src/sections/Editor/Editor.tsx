@@ -1,16 +1,13 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import "./Editor.css";
+import { styles } from "./editor.style";
 
 export function Editor() {
-  console.log("rerender");
   const [regenerate, setRegenerate] = useState(false);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
   let mouseDown = false;
-  let x = 0;
-  let y = 0;
 
   const canvasRef = useRef(null);
   const div = useCallback(
@@ -67,11 +64,11 @@ export function Editor() {
   }
 
   window.addEventListener("resize", () => {
-    // setRegenerate(!regenerate);
+    setRegenerate(!regenerate);
   });
 
   return (
-    <div ref={div} className="Canvas">
+    <div ref={div} style={styles.Canvas}>
       <canvas
         id="Canvas"
         ref={canvasRef}

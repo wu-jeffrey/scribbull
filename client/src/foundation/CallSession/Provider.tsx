@@ -84,9 +84,6 @@ export function Provider({ children }: IProps) {
   );
 
   return (
-    <Context.Provider value={{ url, data, send }}>
-      {connected ? "connected" : "disconnected"}
-      {children}
-    </Context.Provider>
+    <Context.Provider value={{ url, data, send }}>{children}</Context.Provider>
   );
 }

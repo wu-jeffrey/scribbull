@@ -18,7 +18,6 @@ export function Frame() {
   return (
     <Layout>
       <Layout.Header style={styles.Header}>
-        <Menu theme="light" mode="horizontal"></Menu>
         <Button
           type="primary"
           shape="round"
@@ -29,9 +28,7 @@ export function Frame() {
         </Button>
       </Layout.Header>
       <Layout.Content style={styles.Content}>
-        <Card style={styles.Card}>
-          <Editor />
-        </Card>
+        <Editor />
       </Layout.Content>
       <Layout.Footer style={{ textAlign: "center" }}>
         Scribble ©2020 Created by Jeff Wu
