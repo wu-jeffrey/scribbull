@@ -1,24 +1,23 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { styles } from "./editor.style";
+import { useSession } from "../../foundation";
 
 export function Editor() {
-  const [regenerate, setRegenerate] = useState(false);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
+  const { data, send } = useSession();
+
   let mouseDown = false;
 
   const canvasRef = useRef(null);
-  const div = useCallback(
-    (node) => {
-      if (node !== null) {
-        setHeight(node.getBoundingClientRect().height);
-        setWidth(node.getBoundingClientRect().width);
-      }
-    },
-    [regenerate]
-  );
+  const div = useCallback((node) => {
+    if (node !== null) {
+      setHeight(node.getBoundingClientRect().height);
+      setWidth(node.getBoundingClientRect().width);
+    }
+  }, []);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -29,6 +28,19 @@ export function Editor() {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (data && context) {
+      const image = new Image();
+
+      image.addEventListener("load", () => {
+        context.drawImage(image, 0, 0);
+      });
+
+      //@ts-ignore
+      image.src = data.image;
+    }
+  }, [data]);
 
   const onMouseDown = (e: any) => {
     mouseDown = true;
@@ -52,6 +64,14 @@ export function Editor() {
   const onMouseUp = (e: any) => {
     mouseDown = false;
     context?.closePath();
+
+    //@ts-ignore
+    var canvasContents = canvasRef?.current?.toDataURL();
+    var data = { image: canvasContents, date: Date.now() };
+    var string = JSON.stringify(data);
+    if (send) {
+      send(string);
+    }
   };
 
   function getCanvasOffset() {
@@ -62,10 +82,6 @@ export function Editor() {
       return { x: rect.left, y: rect.top };
     }
   }
-
-  window.addEventListener("resize", () => {
-    setRegenerate(!regenerate);
-  });
 
   return (
     <div ref={div} style={styles.Canvas}>

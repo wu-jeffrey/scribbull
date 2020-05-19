@@ -5,15 +5,7 @@ import { useSession } from "../CallSession";
 import { Editor } from "../../sections";
 
 export function Frame() {
-  const { url, data, send } = useSession();
-  const onChange = useCallback(
-    (event: any) => {
-      if (send) {
-        send(JSON.stringify({ test: event.target.value }));
-      }
-    },
-    [send]
-  );
+  const { url } = useSession();
 
   return (
     <Layout>

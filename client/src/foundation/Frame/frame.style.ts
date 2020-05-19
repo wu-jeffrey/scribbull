@@ -5,7 +5,8 @@ export const styles = {
   ShareButton: { backgroundColor: "#00D789", border: "1px solid #00D789" },
   Content: {
     padding: "24px",
-    minHeight: "280px",
+    display: "flex",
+    justifyContent: "center",
   },
   Card: {},
 };

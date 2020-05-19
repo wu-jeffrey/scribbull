@@ -1,6 +1,6 @@
 export interface IContext {
   url: string;
-  data: Object;
+  data: any;
   send?: Function | null;
 }
 

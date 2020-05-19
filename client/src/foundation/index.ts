@@ -1,2 +1,2 @@
 export { Frame } from "./Frame";
-export { CallSessionProvider } from "./CallSession";
+export { CallSessionProvider, useSession } from "./CallSession";

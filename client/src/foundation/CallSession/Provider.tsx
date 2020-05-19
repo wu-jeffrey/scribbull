@@ -65,11 +65,12 @@ export function Provider({ children }: IProps) {
     });
 
     p.on("connect", (data: any) => {
+      console.log("connected");
       setConnected(true);
     });
 
     p.on("data", (data: any) => {
-      setData(data);
+      setData(JSON.parse(data.toString()));
       console.log(JSON.parse(data.toString()));
     });
   }, []);
