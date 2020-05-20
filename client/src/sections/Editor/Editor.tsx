@@ -40,6 +40,7 @@ export function Editor() {
       //@ts-ignore
       image.src = data.image;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const onMouseDown = (e: any) => {
@@ -48,12 +49,17 @@ export function Editor() {
   };
 
   const onMouseMove = (e: any) => {
+    const touch = e.nativeEvent instanceof TouchEvent;
+
     if (mouseDown && context != null) {
       const offset = getCanvasOffset();
 
       if (offset) {
-        let endx = e.pageX - offset.x;
-        let endy = e.pageY - offset.y;
+        const x = touch ? e.touches[0].pageX : e.pageX;
+        const y = touch ? e.touches[0].pageY : e.pageY;
+
+        let endx = x - offset.x;
+        let endy = y - offset.y;
 
         context.lineTo(endx, endy);
         context.stroke();
@@ -93,6 +99,9 @@ export function Editor() {
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
+        onTouchStart={onMouseDown}
+        onTouchMove={onMouseMove}
+        onTouchEnd={onMouseUp}
       />
     </div>
   );

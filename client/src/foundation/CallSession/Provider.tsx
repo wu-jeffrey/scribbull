@@ -56,7 +56,7 @@ export function Provider({ children }: IProps) {
         })();
       } else {
         (async () => {
-          const response = await axios.post(`/api/sessions/join`, {
+          await axios.post(`/api/sessions/join`, {
             peerId: data,
             sessionId: sessionId,
           });
@@ -73,6 +73,7 @@ export function Provider({ children }: IProps) {
       setData(JSON.parse(data.toString()));
       console.log(JSON.parse(data.toString()));
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const send = useCallback(

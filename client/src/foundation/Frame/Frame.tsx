@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { Layout, Menu, Card, Button, Input } from "antd";
+import React from "react";
+import { Layout, Button } from "antd";
 import { styles } from "./frame.style";
 import { useSession } from "../CallSession";
 import { Editor } from "../../sections";
