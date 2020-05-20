@@ -58,8 +58,8 @@ export function Editor() {
         const x = touch ? e.touches[0].pageX : e.pageX;
         const y = touch ? e.touches[0].pageY : e.pageY;
 
-        let endx = x - offset.x;
-        let endy = y - offset.y;
+        let endx = x - offset.x - window.scrollX;
+        let endy = y - offset.y - window.scrollY;
 
         context.lineTo(endx, endy);
         context.stroke();
