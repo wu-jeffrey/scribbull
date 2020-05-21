@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { styles } from "./editor.style";
 import { useSession } from "../../foundation";
+import { Toolbox, EditorContextProvider } from "./components";
 
 export function Editor() {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
@@ -90,19 +91,22 @@ export function Editor() {
   }
 
   return (
-    <div ref={div} style={styles.Canvas}>
-      <canvas
-        id="Canvas"
-        ref={canvasRef}
-        width={width}
-        height={height}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onTouchStart={onMouseDown}
-        onTouchMove={onMouseMove}
-        onTouchEnd={onMouseUp}
-      />
-    </div>
+    <EditorContextProvider>
+      <Toolbox />
+      <div ref={div} style={styles.Canvas}>
+        <canvas
+          id="Canvas"
+          ref={canvasRef}
+          width={width}
+          height={height}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onTouchStart={onMouseDown}
+          onTouchMove={onMouseMove}
+          onTouchEnd={onMouseUp}
+        />
+      </div>
+    </EditorContextProvider>
   );
 }
