@@ -3,21 +3,13 @@ import { Layout, Button } from "antd";
 import { styles } from "./frame.style";
 import { useSession } from "../CallSession";
 import { Editor, EditorContextProvider } from "../../sections";
+import { TopBar } from "./components/TopBar/TopBar";
 
 export function Frame() {
-  const { url } = useSession();
-
   return (
     <Layout>
       <Layout.Header style={styles.Header}>
-        <Button
-          type="primary"
-          shape="round"
-          style={styles.ShareButton}
-          href={url}
-        >
-          Share
-        </Button>
+        <TopBar />
       </Layout.Header>
       <Layout.Content style={styles.Content}>
         <EditorContextProvider>
