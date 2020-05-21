@@ -47,7 +47,6 @@ export function Editor() {
   }, [data]);
 
   useEffect(() => {
-    console.log("wtf");
     if (!context) return;
     switch (tool) {
       case "pen":
