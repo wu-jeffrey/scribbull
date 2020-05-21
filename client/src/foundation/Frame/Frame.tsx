@@ -2,7 +2,7 @@ import React from "react";
 import { Layout, Button } from "antd";
 import { styles } from "./frame.style";
 import { useSession } from "../CallSession";
-import { Editor } from "../../sections";
+import { Editor, EditorContextProvider } from "../../sections";
 
 export function Frame() {
   const { url } = useSession();
@@ -20,7 +20,9 @@ export function Frame() {
         </Button>
       </Layout.Header>
       <Layout.Content style={styles.Content}>
-        <Editor />
+        <EditorContextProvider>
+          <Editor />
+        </EditorContextProvider>
       </Layout.Content>
       <Layout.Footer style={{ textAlign: "center" }}>
         Scribble ©2020 Created by Jeff Wu

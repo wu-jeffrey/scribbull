@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React from "react";
 import { useEditorContext } from "../EditorContext";
 import { Button } from "antd";
-import { FaEraser, FaPen, FaMousePointer } from "react-icons/fa";
+import { FaEraser, FaPen } from "react-icons/fa";
 import "./Toolbox.css";
 
 export function Toolbox() {
@@ -28,16 +28,6 @@ export function Toolbox() {
           icon={<FaEraser />}
           onClick={() => {
             setTool("eraser");
-          }}
-        />
-        <Button
-          type={tool === "pointer" ? "primary" : "default"}
-          className="Button"
-          size="large"
-          shape="circle"
-          icon={<FaMousePointer />}
-          onClick={() => {
-            setTool("pointer");
           }}
         />
       </div>
