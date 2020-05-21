@@ -2,7 +2,7 @@ export const styles = {
   Header: {
     backgroundColor: "white",
   },
-  ShareButton: { backgroundColor: "#00D789", border: "1px solid #00D789" },
+  ShareButton: {},
   Content: {
     padding: "24px",
     display: "flex",

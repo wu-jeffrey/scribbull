@@ -1,15 +1,18 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { styles } from "./editor.style";
 import { useSession } from "../../foundation";
+import { Toolbox, useEditorContext } from "./components";
 
 export function Editor() {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
+  const { tool } = useEditorContext();
   const { data, send } = useSession();
 
   let mouseDown = false;
+  let contextStyle = { strokeStyle: "black", lineWidth: 1 };
 
   const canvasRef = useRef(null);
   const div = useCallback((node) => {
@@ -43,6 +46,22 @@ export function Editor() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  useEffect(() => {
+    console.log("wtf");
+    if (!context) return;
+    switch (tool) {
+      case "pen":
+        contextStyle = { strokeStyle: "black", lineWidth: 1 };
+        break;
+      case "eraser":
+        contextStyle = { strokeStyle: "white", lineWidth: 10 };
+        break;
+      case "pointer":
+        contextStyle = { strokeStyle: "rgba(255, 255, 255, 0)", lineWidth: 10 };
+        break;
+    }
+  }, [tool]);
+
   const onMouseDown = (e: any) => {
     mouseDown = true;
     context?.beginPath();
@@ -61,6 +80,8 @@ export function Editor() {
         let endx = x - offset.x - window.scrollX;
         let endy = y - offset.y - window.scrollY;
 
+        context.strokeStyle = contextStyle.strokeStyle;
+        context.lineWidth = contextStyle.lineWidth;
         context.lineTo(endx, endy);
         context.stroke();
       }
@@ -90,19 +111,22 @@ export function Editor() {
   }
 
   return (
-    <div ref={div} style={styles.Canvas}>
-      <canvas
-        id="Canvas"
-        ref={canvasRef}
-        width={width}
-        height={height}
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseUp={onMouseUp}
-        onTouchStart={onMouseDown}
-        onTouchMove={onMouseMove}
-        onTouchEnd={onMouseUp}
-      />
-    </div>
+    <>
+      <Toolbox />
+      <div ref={div} style={styles.Canvas}>
+        <canvas
+          id="Canvas"
+          ref={canvasRef}
+          width={width}
+          height={height}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onTouchStart={onMouseDown}
+          onTouchMove={onMouseMove}
+          onTouchEnd={onMouseUp}
+        />
+      </div>
+    </>
   );
 }
