@@ -1,2 +1,1 @@
-export { Editor } from "./Editor";
-export { EditorContextProvider } from "./Editor/components";
+export { Editor, EditorContextProvider, Toolbar } from "./Editor";

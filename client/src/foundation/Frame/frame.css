@@ -1,0 +1,9 @@
+.Header {
+  background: #ffffff;
+  height: unset;
+}
+.Content {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}

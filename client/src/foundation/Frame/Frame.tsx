@@ -1,17 +1,17 @@
 import React from "react";
-import { Layout, Button } from "antd";
-import { styles } from "./frame.style";
-import { useSession } from "../CallSession";
-import { Editor, EditorContextProvider } from "../../sections";
-import { TopBar } from "./components/TopBar/TopBar";
+import { Layout, Divider } from "antd";
+import { Editor, EditorContextProvider, Toolbar } from "../../sections";
+import { TopBar } from "./components";
+import "./frame.css";
 
 export function Frame() {
   return (
     <Layout>
-      <Layout.Header style={styles.Header}>
+      <Layout.Header className="Header">
         <TopBar />
+        <Toolbar />
       </Layout.Header>
-      <Layout.Content style={styles.Content}>
+      <Layout.Content className="Content">
         <EditorContextProvider>
           <Editor />
         </EditorContextProvider>
