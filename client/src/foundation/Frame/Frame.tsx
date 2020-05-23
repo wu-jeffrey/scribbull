@@ -1,6 +1,6 @@
 import React from "react";
-import { Layout, Divider } from "antd";
-import { Editor, EditorContextProvider, Toolbar } from "../../sections";
+import { Layout } from "antd";
+import { Editor, Toolbar } from "../../sections";
 import { TopBar } from "./components";
 import "./frame.css";
 
@@ -12,9 +12,7 @@ export function Frame() {
         <Toolbar />
       </Layout.Header>
       <Layout.Content className="Content">
-        <EditorContextProvider>
-          <Editor />
-        </EditorContextProvider>
+        <Editor />
       </Layout.Content>
       <Layout.Footer style={{ textAlign: "center" }}>
         Scribble ©2020 Created by Jeff Wu

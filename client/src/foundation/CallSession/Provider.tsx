@@ -9,7 +9,7 @@ export function Provider({ children }: IProps) {
   const [peer, setPeer] = useState<any>();
   const [url, setUrl] = useState("");
   const [connected, setConnected] = useState(false);
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
 
   const initiator = Boolean(window.location.hash === "#init");
   const urlParams = new URLSearchParams(window.location.search);
@@ -70,8 +70,8 @@ export function Provider({ children }: IProps) {
     });
 
     p.on("data", (data: any) => {
-      setData(JSON.parse(data.toString()));
-      console.log(JSON.parse(data.toString()));
+      setData(data);
+      console.log(data);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -86,6 +86,8 @@ export function Provider({ children }: IProps) {
   );
 
   return (
-    <Context.Provider value={{ url, data, send }}>{children}</Context.Provider>
+    <Context.Provider value={{ url, data, setData, send }}>
+      {children}
+    </Context.Provider>
   );
 }

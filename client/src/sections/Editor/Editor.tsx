@@ -3,16 +3,22 @@ import { styles } from "./editor.style";
 import { useSession } from "../../foundation";
 import { Toolbox, useEditorContext } from "./components";
 
+interface ICoordinates {
+  x: number;
+  y: number;
+}
+
 export function Editor() {
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
-  const { tool } = useEditorContext();
+  const { tool, lines } = useEditorContext();
   const { data, send } = useSession();
 
   let mouseDown = false;
   let contextStyle = { strokeStyle: "black", lineWidth: 1 };
+  let points: any[] = [];
 
   const canvasRef = useRef(null);
   const div = useCallback((node) => {
@@ -34,14 +40,7 @@ export function Editor() {
 
   useEffect(() => {
     if (data && context) {
-      const image = new Image();
-
-      image.addEventListener("load", () => {
-        context.drawImage(image, 0, 0);
-      });
-
-      //@ts-ignore
-      image.src = data.image;
+      redrawAll(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -64,25 +63,27 @@ export function Editor() {
   const onMouseDown = (e: any) => {
     mouseDown = true;
     context?.beginPath();
+    points = [];
+
+    const { x, y } = getCoordinates(e);
+
+    context?.moveTo(x, y);
+    points.push({ x, y, mode: "begin" });
   };
 
   const onMouseMove = (e: any) => {
-    const touch = e.nativeEvent instanceof TouchEvent;
-
     if (mouseDown && context != null) {
       const offset = getCanvasOffset();
 
       if (offset) {
-        const x = touch ? e.touches[0].pageX : e.pageX;
-        const y = touch ? e.touches[0].pageY : e.pageY;
-
-        let endx = x - offset.x - window.scrollX;
-        let endy = y - offset.y - window.scrollY;
+        const { x, y } = getCoordinates(e);
 
         context.strokeStyle = contextStyle.strokeStyle;
         context.lineWidth = contextStyle.lineWidth;
-        context.lineTo(endx, endy);
+        context.lineTo(x, y);
         context.stroke();
+
+        points.push({ x, y });
       }
     }
   };
@@ -91,23 +92,57 @@ export function Editor() {
     mouseDown = false;
     context?.closePath();
 
-    //@ts-ignore
-    var canvasContents = canvasRef?.current?.toDataURL();
-    var data = { image: canvasContents, date: Date.now() };
-    var string = JSON.stringify(data);
+    const { x, y } = getCoordinates(e);
+
+    context?.moveTo(x, y);
+    points.push({ x, y, mode: "end" });
+    lines.current.push(points);
+
     if (send) {
-      send(string);
+      send(lines.current);
     }
   };
 
-  function getCanvasOffset() {
+  const getCoordinates = (e: any): ICoordinates => {
+    const offset = getCanvasOffset();
+    if (!offset) return { x: 0, y: 0 };
+
+    const touch = e.nativeEvent instanceof TouchEvent;
+
+    const x = touch ? e.touches[0].pageX : e.pageX;
+    const y = touch ? e.touches[0].pageY : e.pageY;
+
+    return {
+      x: x - offset.x - window.scrollX,
+      y: y - offset.y - window.scrollY,
+    };
+  };
+
+  const getCanvasOffset = () => {
     const canvas = canvasRef.current;
     if (canvas !== null) {
       //@ts-ignore
       const rect = canvas.getBoundingClientRect();
       return { x: rect.left, y: rect.top };
     }
-  }
+  };
+
+  const redrawAll = (lines: any) => {
+    context?.clearRect(0, 0, width, height);
+
+    lines.forEach((points: ICoordinates[]) => {
+      points.forEach((pt: any, i: number) => {
+        if (pt.mode === "begin" || points.length === 0) {
+          context?.beginPath();
+          context?.moveTo(pt.x, pt.y);
+        }
+        context?.lineTo(pt.x, pt.y);
+        if (pt.mode === "end" || i === points.length - 1) {
+          context?.stroke();
+        }
+      });
+    });
+  };
 
   return (
     <>

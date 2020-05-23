@@ -1,6 +1,7 @@
 export interface IContext {
   url: string;
   data: any;
+  setData: Function | null;
   send?: Function | null;
 }
 
