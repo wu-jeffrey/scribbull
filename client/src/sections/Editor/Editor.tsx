@@ -6,6 +6,8 @@ import { Toolbox, useEditorContext } from "./components";
 interface ICoordinates {
   x: number;
   y: number;
+  strokeStyle?: string;
+  lineWidth?: number;
   mode?: "begin" | "end";
 }
 
@@ -47,7 +49,6 @@ export function Editor() {
   }, [data]);
 
   useEffect(() => {
-    if (!context) return;
     switch (tool) {
       case "pen":
         contextStyle = { strokeStyle: "black", lineWidth: 1 };
@@ -59,7 +60,7 @@ export function Editor() {
         contextStyle = { strokeStyle: "rgba(255, 255, 255, 0)", lineWidth: 10 };
         break;
     }
-  }, [tool]);
+  }, [tool, data]);
 
   const onMouseDown = (e: any) => {
     mouseDown = true;
@@ -69,7 +70,13 @@ export function Editor() {
     const { x, y } = getCoordinates(e);
 
     context?.moveTo(x, y);
-    points.current.push({ x, y, mode: "begin" });
+    points.current.push({
+      x,
+      y,
+      strokeStyle: contextStyle.strokeStyle,
+      lineWidth: contextStyle.lineWidth,
+      mode: "begin",
+    });
   };
 
   const onMouseMove = (e: any) => {
@@ -84,7 +91,12 @@ export function Editor() {
         context.lineTo(x, y);
         context.stroke();
 
-        points.current.push({ x, y });
+        points.current.push({
+          x,
+          y,
+          strokeStyle: contextStyle.strokeStyle,
+          lineWidth: contextStyle.lineWidth,
+        });
       }
     }
   };
@@ -96,7 +108,13 @@ export function Editor() {
     const { x, y } = getCoordinates(e);
 
     context?.moveTo(x, y);
-    points.current.push({ x, y, mode: "end" });
+    points.current.push({
+      x,
+      y,
+      strokeStyle: contextStyle.strokeStyle,
+      lineWidth: contextStyle.lineWidth,
+      mode: "end",
+    });
     lines.current.push(points.current);
 
     if (send) {
@@ -131,7 +149,8 @@ export function Editor() {
   };
 
   const redrawAll = (lines: any) => {
-    context?.clearRect(0, 0, width, height);
+    if (!context) return;
+    context.clearRect(0, 0, width, height);
 
     lines.forEach((points: ICoordinates[]) => {
       points.forEach((pt: any, i: number) => {
@@ -139,7 +158,17 @@ export function Editor() {
           context?.beginPath();
           context?.moveTo(pt.x, pt.y);
         }
-        context?.lineTo(pt.x, pt.y);
+
+        if (pt.strokeStyle) {
+          context.strokeStyle = pt.strokeStyle;
+        }
+
+        if (pt.lineWidth) {
+          context.lineWidth = pt.lineWidth;
+        }
+
+        context.lineTo(pt.x, pt.y);
+
         if (pt.mode === "end" || i === points.length - 1) {
           context?.stroke();
         }
