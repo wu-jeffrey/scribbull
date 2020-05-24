@@ -12,7 +12,7 @@ export function Toolbar() {
       <div className="Toolbar">
         <Button type="link" icon={<MdUndo />} onClick={undo} />
         <Button type="link" icon={<MdRedo />} onClick={redo} />
-        <Divider type="vertical" style={{ background: "#cfcfcf" }} />
+        {/* <Divider type="vertical" style={{ background: "#cfcfcf" }} /> */}
         {/* <Button type="link" icon={<MdZoomIn />} />
         <InputNumber
           defaultValue={100}
@@ -25,9 +25,6 @@ export function Toolbar() {
           type="vertical"
           style={{ background: "#cfcfcf", marginLeft: 18 }}
         /> */}
-        <Button size="small" type="link">
-          Clear Page
-        </Button>
       </div>
     </>
   );

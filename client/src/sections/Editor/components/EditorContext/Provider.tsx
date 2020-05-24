@@ -38,7 +38,7 @@ export function Provider({ children }: IProps) {
   };
 
   return (
-    <Context.Provider value={{ tool, setTool, lines, undo, redo }}>
+    <Context.Provider value={{ tool, setTool, lines, undo, redo, redoHistory }}>
       {children}
     </Context.Provider>
   );

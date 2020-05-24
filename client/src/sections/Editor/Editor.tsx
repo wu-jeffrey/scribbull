@@ -6,6 +6,7 @@ import { Toolbox, useEditorContext } from "./components";
 interface ICoordinates {
   x: number;
   y: number;
+  mode?: "begin" | "end";
 }
 
 export function Editor() {
@@ -13,12 +14,12 @@ export function Editor() {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
-  const { tool, lines } = useEditorContext();
+  const { tool, lines, redoHistory } = useEditorContext();
   const { data, send } = useSession();
 
   let mouseDown = false;
   let contextStyle = { strokeStyle: "black", lineWidth: 1 };
-  let points: any[] = [];
+  let points = useRef<ICoordinates[]>([]);
 
   const canvasRef = useRef(null);
   const div = useCallback((node) => {
@@ -63,12 +64,12 @@ export function Editor() {
   const onMouseDown = (e: any) => {
     mouseDown = true;
     context?.beginPath();
-    points = [];
+    points.current = [];
 
     const { x, y } = getCoordinates(e);
 
     context?.moveTo(x, y);
-    points.push({ x, y, mode: "begin" });
+    points.current.push({ x, y, mode: "begin" });
   };
 
   const onMouseMove = (e: any) => {
@@ -83,7 +84,7 @@ export function Editor() {
         context.lineTo(x, y);
         context.stroke();
 
-        points.push({ x, y });
+        points.current.push({ x, y });
       }
     }
   };
@@ -95,12 +96,14 @@ export function Editor() {
     const { x, y } = getCoordinates(e);
 
     context?.moveTo(x, y);
-    points.push({ x, y, mode: "end" });
-    lines.current.push(points);
+    points.current.push({ x, y, mode: "end" });
+    lines.current.push(points.current);
 
     if (send) {
       send(lines.current);
     }
+
+    redoHistory.current = [];
   };
 
   const getCoordinates = (e: any): ICoordinates => {
