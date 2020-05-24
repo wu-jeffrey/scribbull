@@ -5,8 +5,8 @@ import { Session, Peer } from "../../db";
 
 export const router = express.Router();
 
-// const FRONTEND_URI = 'localhost:3000'
-const FRONTEND_URI = "192.168.0.19:3000";
+const FRONTEND_URI = "localhost:3000";
+// const FRONTEND_URI = "192.168.0.19:3000";
 
 router.get("/:sessionId", async (req, res, next) => {
   const sessionId = req.params.sessionId;

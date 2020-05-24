@@ -9,7 +9,7 @@ export function Provider({ children }: IProps) {
   const lines = useRef([]);
   const redoHistory = useRef([]);
 
-  const { setData } = useSession();
+  const { send, setData } = useSession();
 
   const undo = () => {
     const line = lines.current.pop();
@@ -21,6 +21,10 @@ export function Provider({ children }: IProps) {
     if (setData) {
       // Need to force setter to realize its updating
       setData([...lines.current]);
+    }
+
+    if (send) {
+      send([...lines.current]);
     }
   };
 
@@ -34,6 +38,10 @@ export function Provider({ children }: IProps) {
     if (setData) {
       // Need to force setter to realize its updating
       setData([...lines.current]);
+    }
+
+    if (send) {
+      send([...lines.current]);
     }
   };
 

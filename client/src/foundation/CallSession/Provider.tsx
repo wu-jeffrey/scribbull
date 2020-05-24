@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import Peer from "simple-peer";
 import { default as axios } from "axios";
 
@@ -70,16 +70,30 @@ export function Provider({ children }: IProps) {
     });
 
     p.on("data", (data: any) => {
-      setData(data);
-      console.log(data);
+      const parsed = JSON.parse(data.toString());
+      setData(parsed);
+      console.log(parsed);
+    });
+
+    p.on("disconnected", (data: any) => {
+      console.log("disconnected");
+      setConnected(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    console.log(peer);
+    return () => {
+      peer.disconnect();
+    };
   }, []);
 
   const send = useCallback(
     (data: any) => {
       if (connected) {
-        peer.send(data);
+        const string = JSON.stringify(data);
+        peer.send(string);
       }
     },
     [peer, connected]

@@ -44,6 +44,8 @@ export function Editor() {
   useEffect(() => {
     if (data && context) {
       redrawAll(data);
+
+      lines.current = data;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
