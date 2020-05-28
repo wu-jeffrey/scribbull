@@ -5,10 +5,8 @@ import { Session, Peer } from "../../db";
 
 export const router = express.Router();
 
-const FRONTEND_URI = "localhost:3000";
-// const FRONTEND_URI = "192.168.0.19:3000";
-
 router.get("/:sessionId", async (req, res, next) => {
+  const referer = req.headers.referer;
   const sessionId = req.params.sessionId;
 
   const session = await Session.findOne({ _id: sessionId });
@@ -20,12 +18,14 @@ router.get("/:sessionId", async (req, res, next) => {
   session.populated("peers")[0]?.peerId;
 
   res.json({
-    url: `http://${FRONTEND_URI}?session_id=${session._id}`,
+    url: `${referer}?session_id=${session._id}`,
     session: session,
   });
 });
 
 router.post("/init", async (req, res, next) => {
+  const referer = req.headers.referer;
+
   const newPeer = {
     name: req.body.name ?? randomAnimalName(),
     peerId: req.body.peerId,
@@ -38,12 +38,13 @@ router.post("/init", async (req, res, next) => {
     .catch(next);
 
   res.json({
-    url: `http://${FRONTEND_URI}?session_id=${session.id}`,
+    url: `${referer}?session_id=${session.id}`,
     session: session,
   });
 });
 
 router.post("/join", async (req, res, next) => {
+  const referer = req.headers.referer;
   const sessionId = req.body.sessionId;
 
   const peer = await Peer.create({
@@ -63,7 +64,7 @@ router.post("/join", async (req, res, next) => {
     .catch(next);
 
   res.json({
-    url: `http://${FRONTEND_URI}?session_id=${session?.id}`,
+    url: `${referer}?session_id=${session?.id}`,
     session: session,
   });
 });
