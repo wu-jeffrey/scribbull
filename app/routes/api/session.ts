@@ -17,6 +17,10 @@ router.get("/:sessionId", async (req, res, next) => {
     .catch(next);
   session.populated("peers")[0]?.peerId;
 
+  if (!session) {
+    throw new Error("No Session Found");
+  }
+
   res.json({
     url: `${referer}?session_id=${session._id}`,
     session: session,
@@ -36,6 +40,10 @@ router.post("/init", async (req, res, next) => {
     .populate("peers")
     .execPopulate()
     .catch(next);
+
+  if (!session) {
+    throw new Error("No Session Found");
+  }
 
   res.json({
     url: `${referer}?session_id=${session.id}`,
@@ -63,8 +71,12 @@ router.post("/join", async (req, res, next) => {
     .execPopulate()
     .catch(next);
 
+  if (!session) {
+    throw new Error("No Session Found");
+  }
+
   res.json({
-    url: `${referer}?session_id=${session?.id}`,
+    url: `${referer}?session_id=${session.id}`,
     session: session,
   });
 });
