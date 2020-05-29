@@ -4,10 +4,12 @@
   "description": "Real-time drawing board",
   "main": "index.ts",
   "scripts": {
+    "start": "ts-node server.ts",
     "server": "nodemon server.ts",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "postinstall": "node-config-ts"
+    "postinstall": "node-config-ts",
+    "heroku-postbuild": "cd client && yarn && yarn run build"
   },
   "author": "",
   "license": "ISC",
